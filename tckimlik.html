@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>TC kimlik</title>
+
+    <style>
+        body {
+            max-width: 440px;
+        }
+
+        #sample {
+            overflow-x: visible;
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        #out {
+            font-size: 18px;
+            background: blue;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h3>enter your iban</h3>
+    <input type="text" id="ibanInp">
+    <button id="inc-btn">increase</button>
+
+    <p id=out></p>
+    <br>
+    <hr />
+    <b>Sample code</b>
+    <pre id=sample></pre>
+
+    <script>
+        "use strict";
+
+        function getIbanInpElement() { return document.getElementById('ibanInp'); }
+
+        function getCurrentIban() { return getIbanInpElement().value; }
+
+        function increaseIbanBy97() {
+            let val = getIbanInpElement().value.replaceAll(/\s/g, '');
+
+            if (!val.includes('TR')) {
+                return;
+            }
+
+            let notr = val.substring(2);
+
+            let arr = notr.split('');
+
+            let ninePos = 10;
+
+            let strAfter9 = notr.substring(ninePos);
+            let numAfter9 = +strAfter9;
+
+            let newNum = numAfter9 + 97;
+
+            let out = 'TR' + notr.substring(0, ninePos) + newNum.toString();
+
+            getIbanInpElement().value = out;
+            report();
+        }
+
+        function verifyIBAN(s) {
+            const ASCII_0 = 48, ASCII_A = 65;
+            if (typeof s != 'string') s = String(s)
+            const E = /[A-Z]{2}[0-9]{2}[A-Z0-9]+/
+            if (!s.match(E)) return false;
+            var acc = 0;
+            function add(n) {
+                if (n == 32) return
+                // if (acc > 1000000) acc %= 97;
+                acc = n < ASCII_A ? 10 * acc + n - ASCII_0
+                    : 100 * acc + n - ASCII_A + 10;
+                acc %= 97;
+            }
+            s = s.substring(4) + s.substring(0, 4)
+            for (let i = 0; i < s.length; ++i)
+                add(s.charCodeAt(i));
+            return acc == 1;
+        }
+
+        function report() {
+            let v = getIbanInpElement().value.replaceAll(/\s/g, '')
+            let t = ''
+            t = verifyIBAN(v) ? 'IBAN ✓' : 'hatalı'
+            out.innerText = v + ' ' + t
+            console.log(v, t)
+        }
+
+        let inc_btn = document.getElementById('inc-btn');
+        inc_btn.addEventListener("click", increaseIbanBy97);
+
+        getIbanInpElement().addEventListener('input', (event) => {
+            report();
+        });
+
+        let initialIban = 'TR940001002293907528761306';
+        getIbanInpElement().value = initialIban;
+
+        report();
+
+        let sample = document.getElementById('sample');
+        sample.innerText = [
+            getIbanInpElement,
+            getCurrentIban, increaseIbanBy97,
+            verifyIBAN, report,
+        ].join('\n\n\n');
+    </script>
+</body>
+
+
+</html>
