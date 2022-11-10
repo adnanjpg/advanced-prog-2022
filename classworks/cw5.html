@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://blm305.github.io/2022/work/fetch.html -->
+<html lang="en-US">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" href="https://blm-fsmvu.github.io/305/images/icon192.png">
+    <title>Classwork 5</title>
+
+    <style>
+        /* CSS comment */
+        body {
+            max-width: 440px;
+        }
+
+        #url {
+            width: 190px;
+        }
+
+        span,
+        #url {
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <h2 id="title"></h2>
+
+    <h3>Battery status</h3>
+    <p>
+        <span id="battstat"></span>
+        <br>
+        <progress id="battlevelprog" max="100"></progress>
+        <span id="battlevel"></span>
+    </p>
+
+    <h3>Connection status</h3>
+    <p>
+        <span id="connectstat"></span>
+    </p>
+
+    <h3>Keyboard</h3>
+    <p>
+        <span id="pressedkeysel"></span>
+    </p>
+
+    <hr>
+    <b>Sample code</b>
+    <pre id="sample"></pre>
+
+    <hr>
+
+    <script>
+        "use strict";
+
+        let pressedKeys = new Set()
+
+        function init() {
+            // battery
+            navigator.getBattery().then(b => {
+                setBatteryLevel(b);
+                setBatteryStat(b);
+                b.onlevelchange = () => setBatteryLevel(b);
+                b.onchargingchange = () => setBatteryStat(b);
+            }
+            );
+            // conenction
+            setConnectionStat(window.navigator.onLine)
+            window.addEventListener('online', () => setConnectionStat(true));
+            window.addEventListener('offline', () => setConnectionStat(false));
+            // key press
+            window.addEventListener('keydown', (event) => {
+                pressedKeys.add(event.key)
+                rerenderPressedKeys()
+            })
+            window.addEventListener('keyup', (event) => {
+                pressedKeys.delete(event.key)
+                rerenderPressedKeys()
+            })
+        }
+
+        function setBatteryLevel(b) {
+            let level = Math.round(b.level * 100)
+            battlevel.innerText = level + "%"
+            battlevelprog.value = level
+        }
+        function setBatteryStat(b) {
+            battstat.innerText = b.charging ? "Charging" : "Discharging"
+        }
+
+
+        function setConnectionStat(isOnline) {
+            connectstat.innerText = isOnline ? "connected -- online"
+                : "disconnected -- offline"
+        }
+
+        function rerenderPressedKeys() {
+            pressedkeysel.innerText = Array.from(pressedKeys).join(', ')
+        }
+
+
+
+
+        title.innerText = document.title;
+        sample.innerText = init + "\n" + setBatteryLevel + "\n" + setBatteryStat + "\n" + setConnectionStat + "\n" + rerenderPressedKeys;
+        init();
+    </script>
+
+
+
+</body>
+
+</html>
