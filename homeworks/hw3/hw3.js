@@ -4,8 +4,6 @@ document.addEventListener("DOMContentLoaded", function (_) {
     const spriteCount = 10;
     var paddingPercent = 0.05;
 
-
-
     var imgsDiv = document.getElementById('imgs-div');
 
     var imagesAreFetched = false;
@@ -37,20 +35,53 @@ document.addEventListener("DOMContentLoaded", function (_) {
         }
     }
 
-    function getSpriteWidth() { }
+    function pause() {
+        clearInterval(intervalId)
+        intervalId = null
+    }
+
+    function resume() {
+        runIntervalAnimator()
+    }
+
+    function pauseResume() {
+        if (intervalId) {
+            pause()
+        } else {
+            resume()
+        }
+
+        document.getElementById('pause-resume').innerText = intervalId ? 'Pause' : 'Resume'
+    }
+
+    document.getElementById('pause-resume').addEventListener('click', pauseResume)
+
+    var intervalId
+    var currentRound = 0
+    var paddingSingleSidePx = 20;
+    var paddingTotalPx = paddingSingleSidePx * 2;
+
+
+    imgsDiv.style.marginTop = paddingSingleSidePx + 'px';
+    imgsDiv.style.marginBottom = paddingSingleSidePx + 'px';
+
+    function getSpriteWidth() {
+        var screenwidth = window.innerWidth;
+        var screenWidthSize = screenwidth - paddingTotalPx;
+        var spriteWidth = screenWidthSize / spriteCount;
+
+        return spriteWidth;
+    }
+
 
     function runIntervalAnimator() {
 
-        var currentRound = 0;
-        setInterval(function () {
 
-            var screenwidth = window.innerWidth;
-            var paddingSingleSidePx = screenwidth * paddingPercent;
-            var paddingTotalPx = paddingSingleSidePx * 2;
+        intervalId = setInterval(function () {
 
-            var screenWidthSize = screenwidth - paddingTotalPx;
+            var spriteWidth = getSpriteWidth();
 
-            var spriteWidth = screenWidthSize / spriteCount;
+            imgsDiv.style.height = spriteWidth + 'px';
 
             var prevId = 'sprite-img-' + (currentRound == 0 ? spriteCount - 1 : currentRound % spriteCount - 1);
             var currentId = 'sprite-img-' + (currentRound);
