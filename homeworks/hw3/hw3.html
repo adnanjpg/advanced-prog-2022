@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" href="../../assets/avatar.jpeg">
+    <script src="hw3.js"></script>
+    <title>Fetch & Animations</title>
+</head>
+
+<body>
+    <h2 id=title></h2>
+
+    <div id="imgs-div"></div>
+
+
+    <script>
+        title.innerText = document.title;
+
+
+        var imgSources = []
+
+        for (let index = 1; index <= 10; index++) {
+            imgSources.push(`assets/sprite/outputs/s${index}.png`)
+        }
+        document.getElementById('imgs-div').innerHTML = imgSources.map(src => `<img src="${src}">`).join('')
+    </script>
+</body>
+
+</html>
