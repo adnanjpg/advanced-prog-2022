@@ -51,10 +51,17 @@ document.addEventListener("DOMContentLoaded", function (_) {
             resume()
         }
 
-        document.getElementById('pause-resume').innerText = intervalId ? 'Pause' : 'Resume'
+        document.getElementById('pause-resume-button').innerText = intervalId ? 'Pause' : 'Resume'
     }
+    document.getElementById('pause-resume-button').addEventListener('click', pauseResume)
 
-    document.getElementById('pause-resume').addEventListener('click', pauseResume)
+    function restart() {
+        if (elementAtDom) {
+            elementAtDom.remove()
+        }
+        currentRound = 0
+    }
+    document.getElementById('restart-button').addEventListener('click', restart)
 
     var intervalId
     var currentRound = 0
@@ -73,9 +80,8 @@ document.addEventListener("DOMContentLoaded", function (_) {
         return spriteWidth;
     }
 
-
+    var elementAtDom
     function runIntervalAnimator() {
-
 
         intervalId = setInterval(function () {
 
@@ -83,13 +89,11 @@ document.addEventListener("DOMContentLoaded", function (_) {
 
             imgsDiv.style.height = spriteWidth + 'px';
 
-            var prevId = 'sprite-img-' + (currentRound == 0 ? spriteCount - 1 : currentRound % spriteCount - 1);
+            // var prevId = 'sprite-img-' + (currentRound == 0 ? spriteCount - 1 : currentRound % spriteCount - 1);
             var currentId = 'sprite-img-' + (currentRound);
 
-            console.log(`prevId: ${prevId}, currentId: ${currentId}`)
-            var prevImg = document.getElementById(prevId);
-            if (prevImg != null) {
-                prevImg.remove();
+            if (elementAtDom) {
+                elementAtDom.remove();
             }
 
             var img = document.createElement('img');
@@ -99,6 +103,7 @@ document.addEventListener("DOMContentLoaded", function (_) {
             img.style.left = Math.floor(currentRound * spriteWidth + paddingSingleSidePx) + 'px';
             img.style.width = spriteWidth + 'px';
             img.style.height = spriteWidth + 'px';
+            elementAtDom = img;
             imgsDiv.appendChild(img);
 
             if (currentRound + 1 == spriteCount) {
