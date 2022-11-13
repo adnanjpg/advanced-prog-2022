@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function (_) {
     document.getElementById('title').innerText = document.title;
 
     const spriteCount = 10;
-    var paddingPercent = 0.05;
 
     var imgsDiv = document.getElementById('imgs-div');
 
@@ -67,13 +66,29 @@ document.addEventListener("DOMContentLoaded", function (_) {
     function stop() {
         clearInterval(intervalId)
         intervalId = null
-        currentRound = 0
         if (elementAtDom) {
             elementAtDom.remove()
         }
     }
     document.getElementById('stop-button').addEventListener('click', stop)
 
+    function next() {
+        if (elementAtDom) {
+            elementAtDom.remove()
+        }
+        currentRound++
+        drawFrameAt(currentRound)
+    }
+    document.getElementById('next-button').addEventListener('click', next)
+
+    function previous() {
+        if (elementAtDom) {
+            elementAtDom.remove()
+        }
+        currentRound--
+        drawFrameAt(currentRound)
+    }
+    document.getElementById('prev-button').addEventListener('click', previous)
 
     var intervalId
     var currentRound = 0
@@ -92,6 +107,34 @@ document.addEventListener("DOMContentLoaded", function (_) {
         return spriteWidth;
     }
 
+    function drawFrameAt(index) {
+        if (index < 0) {
+            index = spriteCount + (index % spriteCount);
+        }
+
+        index = index % spriteCount
+
+        var spriteWidth = getSpriteWidth();
+
+        imgsDiv.style.height = spriteWidth + 'px';
+
+        var currentId = 'sprite-img-' + (index);
+
+        if (elementAtDom) {
+            elementAtDom.remove();
+        }
+
+        var img = document.createElement('img');
+        img.src = imgs[index];
+        img.id = currentId;
+        img.style.position = 'absolute';
+        img.style.left = Math.floor(index * spriteWidth + paddingSingleSidePx) + 'px';
+        img.style.width = spriteWidth + 'px';
+        img.style.height = spriteWidth + 'px';
+        elementAtDom = img;
+        imgsDiv.appendChild(img);
+    }
+
     var elementAtDom
     function runIntervalAnimator() {
 
@@ -101,26 +144,7 @@ document.addEventListener("DOMContentLoaded", function (_) {
 
         intervalId = setInterval(function () {
 
-            var spriteWidth = getSpriteWidth();
-
-            imgsDiv.style.height = spriteWidth + 'px';
-
-            // var prevId = 'sprite-img-' + (currentRound == 0 ? spriteCount - 1 : currentRound % spriteCount - 1);
-            var currentId = 'sprite-img-' + (currentRound);
-
-            if (elementAtDom) {
-                elementAtDom.remove();
-            }
-
-            var img = document.createElement('img');
-            img.src = imgs[currentRound];
-            img.id = currentId;
-            img.style.position = 'absolute';
-            img.style.left = Math.floor(currentRound * spriteWidth + paddingSingleSidePx) + 'px';
-            img.style.width = spriteWidth + 'px';
-            img.style.height = spriteWidth + 'px';
-            elementAtDom = img;
-            imgsDiv.appendChild(img);
+            drawFrameAt(currentRound)
 
             if (currentRound + 1 == spriteCount) {
                 currentRound = 0;
@@ -129,14 +153,6 @@ document.addEventListener("DOMContentLoaded", function (_) {
             }
 
         }, 300);
-
-
-        // var imgSources = []
-
-        // for (let index = 1; index <= spriteCount; index++) {
-        //     imgSources.push(`assets/sprite/outputs/s${index}.png`)
-        // }
-        // document.getElementById('imgs-div').innerHTML = imgSources.map(src => `<img src="${src}">`).join('')
     }
 
 
