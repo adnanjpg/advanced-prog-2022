@@ -60,8 +60,20 @@ document.addEventListener("DOMContentLoaded", function (_) {
             elementAtDom.remove()
         }
         currentRound = 0
+        runIntervalAnimator()
     }
     document.getElementById('restart-button').addEventListener('click', restart)
+
+    function stop() {
+        clearInterval(intervalId)
+        intervalId = null
+        currentRound = 0
+        if (elementAtDom) {
+            elementAtDom.remove()
+        }
+    }
+    document.getElementById('stop-button').addEventListener('click', stop)
+
 
     var intervalId
     var currentRound = 0
@@ -82,6 +94,10 @@ document.addEventListener("DOMContentLoaded", function (_) {
 
     var elementAtDom
     function runIntervalAnimator() {
+
+        if (intervalId) {
+            return
+        }
 
         intervalId = setInterval(function () {
 
