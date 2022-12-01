@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="../../assets/avatar.jpeg" />
+    <title>GitHub Users</title>
+    <style>
+      body {
+        max-width: 440px;
+      }
+      img {
+        padding-right: 12px;
+        width: 300px;
+      }
+      pre {
+        overflow-x: auto;
+      }
+      #out {
+        color: blue;
+      }
+      #err {
+        color: red;
+      }
+      #repoList {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: smaller;
+        color: initial;
+      }
+      #lim {
+        position: absolute;
+        top: 40px;
+        right: 5px;
+        font-family: Verdana, Geneva, sans-serif;
+        font-size: smaller;
+      }
+      #userDisplayName {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: larger;
+        color: initial;
+      }
+      #userName {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: smaller;
+        color: initial;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2 id="title"></h2>
+    <input type="search" id="usr" value="adnanjpg" onChange="readUser()" />
+    <p id="out">
+      <!--  -->
+      <div>
+        <img id="avatar" alt="Avatar for the selected user" />
+      </div>
+      <br />
+      <span id="userDisplayName"></span>
+      <br />
+      <span id="userName"></span>
+      <br />
+      <span id="userCompany"></span>
+      <br />
+      <span id="userLocation"></span>
+      <br />
+      <a id="userUrl"></a>
+      <br />
+    </p>
+    <p id="err"></p>
+    <div id="lim" title="Rate used / Rate limit"></div>
+    <hr />
+    <b>Sample code</b>
+    <pre id="sample"></pre>
+
+    <script>
+      'use strict'
+      function error(e) {
+        err.innerText = e
+        console.error(e)
+        out.hidden = 1
+        err.hidden = 0
+        showRateLimit()
+      }
+
+      function exception(s) {
+        switch (s) {
+          case 403:
+            throw 'Rate limit exceeded'
+          case 404:
+            throw usr.value + ' not found'
+          default:
+            throw 'Status ' + s
+        }
+      }
+
+      async function toJSON(url) {
+        try {
+          let r = await fetch(url)
+          if (!r.ok) exception(r.status)
+          return r.json()
+        } catch (e) {
+          error(e)
+        }
+      }
+
+      async function readUser() {
+        const URL = 'https://api.github.com/users/'
+        let u = await toJSON(URL + usr.value)
+        if (!u || !u.login) return
+        out.hidden = 0
+        err.hidden = 1
+        //start with the avatar
+        avatar.src = u.avatar_url
+
+        //display name
+        userDisplayName.innerText = u.name
+        userName.innerText = u.login
+        userCompany.innerText = u.company
+        userLocation.innerText = u.location
+        
+        //link to GitHub
+        let h = 'github.com/' + u.login
+        userUrl.href = 'https://' + h
+        userUrl.innerText = h
+
+        showRateLimit()
+      }
+
+      async function showRateLimit() {
+        const LIM = 'https://api.github.com/rate_limit'
+        let { rate } = await toJSON(LIM)
+        lim.innerText = rate.used + '/' + rate.limit
+      }
+
+      title.innerText = document.title
+      sample.innerText = toJSON + '\n' + readUser
+      readUser()
+    </script>
+  </body>
+</html>
