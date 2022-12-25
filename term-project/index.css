@@ -1,0 +1,144 @@
+body {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* people list */
+#ppllist {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.person {
+  flex: 0 0 48%;
+  margin: 10px 0.5%;
+}
+
+.selected-person {
+  border: 1px solid rgb(113, 19, 19);
+}
+
+.person-img {
+  width: 100%;
+  display: block;
+}
+
+.person-body-text {
+  padding: 10px;
+}
+
+/* items list */
+#itemslist {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.item {
+  flex: 0 0 48%;
+  margin: 10px 0.5%;
+}
+
+.item-img {
+  width: 100%;
+  display: block;
+}
+
+.item-body {
+  padding: 10px;
+}
+
+.name-n-price {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.cart-amount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-amount > * {
+  margin: 0 5px;
+  font-size: 25px;
+}
+
+.item-body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+/* budget */
+
+#budget {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#sticky-budget {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.budget-col {
+  flex: 0 0 30%;
+}
+
+.cart-btn {
+  user-select: none;
+  cursor: pointer;
+}
+
+.amount-input {
+  width: 50px;
+  text-align: center;
+  font-size: 25px;
+}
+
+.cart-btn-unpurchasable {
+  cursor: default;
+  color: #ccc;
+}
+
+.budget-btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+.budget-btns > * {
+  margin: 0 5px;
+}
+
+.budget-btn {
+  /* Add some styling to the button */
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: blue;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 20px;
+  cursor: pointer;
+
+  /* Add a hover effect */
+  transition: background-color 0.2s;
+}
+
+.budget-btn:hover {
+  background-color: darkblue;
+}
