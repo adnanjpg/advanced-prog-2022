@@ -1,7 +1,7 @@
 {
     "name": "The money spender",
     "short_name": "Money spender",
-    "start_url": "./advanced-prog-2022/term-project/index.html",
+    "start_url": "./index.html",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#ffffff",
